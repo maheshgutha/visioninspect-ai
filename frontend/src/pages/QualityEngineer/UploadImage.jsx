@@ -104,13 +104,12 @@ export default function UploadImage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-700">Product Name</label>
+                <label className="text-sm font-medium text-slate-700">Product Name (optional - leave blank to auto-detect)</label>
                 <input
-                  required
                   value={form.product_name}
                   onChange={(e) => setForm({ ...form, product_name: e.target.value })}
                   className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"
-                  placeholder="e.g. Aluminum Bracket - Model A2"
+                  placeholder="Leave blank: the system identifies the product"
                 />
               </div>
 

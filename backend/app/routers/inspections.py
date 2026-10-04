@@ -69,7 +69,7 @@ def _doc_to_out(doc: dict) -> InspectionOut:
     )
 
 
-def _run_inspection_pipeline(file_path: str, product_name: str) -> dict:
+def _run_inspection_pipeline(file_path: str, product_name: Optional[str]) -> dict:
     """
     Milestone 2 pipeline: image quality analysis + defect prediction.
     Returns a dict of fields to merge onto the inspection document. Never
@@ -90,7 +90,8 @@ def _run_inspection_pipeline(file_path: str, product_name: str) -> dict:
             "notes": f"Defect detection failed: {e}",
         }
 
-    return {
+    result = {
+        "detected_product": prediction.get("detected_product"),
         "status": prediction["status"],
         "quality_report": quality_report,
         "anomaly_ratio": prediction["anomaly_ratio"],
@@ -104,11 +105,14 @@ def _run_inspection_pipeline(file_path: str, product_name: str) -> dict:
         "quality_recommendation": prediction.get("quality_recommendation"),
         "severity_details": prediction.get("severity_details"),
     }
+    if prediction.get("notes"):
+        result["notes"] = prediction["notes"]
+    return result
 
 
 @router.post("/upload", response_model=InspectionOut, status_code=201)
 async def upload_product_image(
-    product_name: str = Form(...),
+    product_name: Optional[str] = Form(None),   # optional: left blank, the product is auto-detected
     batch_number: Optional[str] = Form(None),
     notes: Optional[str] = Form(None),
     file: UploadFile = File(...),
@@ -140,8 +144,9 @@ async def upload_product_image(
     with open(file_path, "wb") as f:
         f.write(contents)
 
+    product_name = (product_name or "").strip()
     inspection_doc = {
-        "product_name": product_name,
+        "product_name": product_name or "Unidentified product",
         "batch_number": batch_number,
         "image_filename": unique_filename,
         "uploaded_by": str(current_user["_id"]),
@@ -155,7 +160,11 @@ async def upload_product_image(
         "source": "manual_upload",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    inspection_doc.update(_run_inspection_pipeline(file_path, product_name))
+    pipeline_result = _run_inspection_pipeline(file_path, product_name)
+    detected = pipeline_result.pop("detected_product", None)
+    if not product_name and detected:
+        inspection_doc["product_name"] = detected.strip().title()   # auto-detected name
+    inspection_doc.update(pipeline_result)
     if notes and inspection_doc.get("notes") != notes:
         # a pipeline failure note takes priority, but keep the user's note too
         inspection_doc["notes"] = f"{notes} | {inspection_doc['notes']}"

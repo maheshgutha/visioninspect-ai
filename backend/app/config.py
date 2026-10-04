@@ -16,10 +16,6 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MVTEC_DATASET_PATH: str = "./dataset"
 
-    # Milestone 2: defect detection engine
-    MODEL_CACHE_DIR: str = "model_cache"
-    REFERENCE_IMAGE_SIZE: int = 256
-
     # PatchCore model (trained by train_patchcore.py)
     PATCHCORE_DIR: str = "model_cache/patchcore"
     PATCHCORE_CORESET_RATIO: float = 0.05
