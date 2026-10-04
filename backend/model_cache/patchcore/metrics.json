@@ -1,0 +1,70 @@
+{
+  "metal_nut": {
+    "n_test_good": 22,
+    "n_test_defect": 93,
+    "image_auroc": 0.9971,
+    "accuracy_at_threshold": 0.9652,
+    "good_pass_rate": 0.9545,
+    "defect_catch_rate": 0.9677,
+    "pixel_auroc": 0.9815,
+    "per_type_flagged_rate": {
+      "bent": {
+        "n": 25,
+        "flagged_rate": 1.0
+      },
+      "color": {
+        "n": 22,
+        "flagged_rate": 0.955
+      },
+      "flip": {
+        "n": 23,
+        "flagged_rate": 1.0
+      },
+      "good": {
+        "n": 22,
+        "flagged_rate": 0.045
+      },
+      "scratch": {
+        "n": 23,
+        "flagged_rate": 0.913
+      }
+    },
+    "threshold": 2.094237510924472
+  },
+  "screw": {
+    "n_test_good": 41,
+    "n_test_defect": 119,
+    "image_auroc": 0.9871,
+    "accuracy_at_threshold": 0.7562,
+    "good_pass_rate": 1.0,
+    "defect_catch_rate": 0.6723,
+    "pixel_auroc": 0.9953,
+    "per_type_flagged_rate": {
+      "good": {
+        "n": 41,
+        "flagged_rate": 0.0
+      },
+      "manipulated_front": {
+        "n": 24,
+        "flagged_rate": 0.542
+      },
+      "scratch_head": {
+        "n": 24,
+        "flagged_rate": 0.708
+      },
+      "scratch_neck": {
+        "n": 25,
+        "flagged_rate": 0.96
+      },
+      "thread_side": {
+        "n": 23,
+        "flagged_rate": 0.304
+      },
+      "thread_top": {
+        "n": 23,
+        "flagged_rate": 0.826
+      }
+    },
+    "threshold": 1.7509400844573975
+  }
+}

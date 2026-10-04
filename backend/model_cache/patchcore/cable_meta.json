@@ -1,0 +1,66 @@
+{
+  "category": "cable",
+  "threshold": 2.401,
+  "val_good_scores": {
+    "min": 2.0765130519866943,
+    "max": 2.4229815006256104,
+    "mean": 2.2175122065977617
+  },
+  "bank_size": 8640,
+  "feature_dim": 384,
+  "coreset_ratio": 0.03,
+  "rotations": 1,
+  "threshold_rule": "manual",
+  "input_size": 320,
+  "n_fit_images": 180,
+  "metrics": {
+    "n_test_good": 58,
+    "n_test_defect": 92,
+    "image_auroc": 0.9816,
+    "accuracy_at_threshold": 0.8867,
+    "good_pass_rate": 0.9655,
+    "defect_catch_rate": 0.837,
+    "pixel_auroc": 0.9839,
+    "per_type_flagged_rate": {
+      "bent_wire": {
+        "n": 13,
+        "flagged_rate": 1.0
+      },
+      "cable_swap": {
+        "n": 12,
+        "flagged_rate": 0.0
+      },
+      "combined": {
+        "n": 11,
+        "flagged_rate": 1.0
+      },
+      "cut_inner_insulation": {
+        "n": 14,
+        "flagged_rate": 0.929
+      },
+      "cut_outer_insulation": {
+        "n": 10,
+        "flagged_rate": 1.0
+      },
+      "good": {
+        "n": 58,
+        "flagged_rate": 0.034
+      },
+      "missing_cable": {
+        "n": 12,
+        "flagged_rate": 1.0
+      },
+      "missing_wire": {
+        "n": 10,
+        "flagged_rate": 1.0
+      },
+      "poke_insulation": {
+        "n": 10,
+        "flagged_rate": 0.8
+      }
+    }
+  },
+  "trained_at": "2026-10-04 09:24:58",
+  "train_seconds": 80.9,
+  "threshold_trained": 2.4930731528646577
+}

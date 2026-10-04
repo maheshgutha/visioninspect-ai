@@ -1,4 +1,27 @@
-venv/ 
-__pycache__/ 
-*.pyc 
-.env 
+# Virtual environments
+venv/
+.venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment secrets - NEVER commit
+.env
+
+# MVTec AD dataset (~5 GB) - keep on disk, never commit
+backend/dataset/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Uploads are transient, not source
+backend/uploads/*
+!backend/uploads/.gitkeep

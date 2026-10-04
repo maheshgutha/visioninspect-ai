@@ -1,0 +1,49 @@
+{
+  "input_size": 320,
+  "cutoff": 0.9817866492271423,
+  "categories": [
+    "bottle",
+    "cable",
+    "metal_nut",
+    "screw",
+    "toothbrush"
+  ],
+  "n_fingerprints": 1033,
+  "identification_accuracy": 1.0,
+  "calibration": {
+    "pos_p01": 0.9843687629699707,
+    "pos_min": 0.9830445051193237,
+    "neg_max": 0.979204535484314,
+    "separated": true,
+    "cutoff": 0.9817866492271423,
+    "unknown_rejected": 1.0,
+    "known_accepted": 1.0
+  },
+  "area_stats": {
+    "bottle": {
+      "median": 0.07927734375,
+      "p95": 0.23714208984374996,
+      "max": 0.33873046875
+    },
+    "cable": {
+      "median": 0.023144531250000003,
+      "p95": 0.10434960937499999,
+      "max": 0.2087109375
+    },
+    "metal_nut": {
+      "median": 0.0417041015625,
+      "p95": 0.38783251953125003,
+      "max": 0.396748046875
+    },
+    "screw": {
+      "median": 0.0068505859375,
+      "p95": 0.02355468749999999,
+      "max": 0.02845703125
+    },
+    "toothbrush": {
+      "median": 0.036455078125,
+      "p95": 0.09393457031249997,
+      "max": 0.111591796875
+    }
+  }
+}

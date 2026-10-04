@@ -1,0 +1,46 @@
+{
+  "category": "bottle",
+  "threshold": 1.795,
+  "val_good_scores": {
+    "min": 1.0961333513259888,
+    "max": 1.795182466506958,
+    "mean": 1.2964692668216984
+  },
+  "bank_size": 8064,
+  "feature_dim": 384,
+  "coreset_ratio": 0.03,
+  "rotations": 1,
+  "threshold_rule": "manual",
+  "input_size": 320,
+  "n_fit_images": 168,
+  "metrics": {
+    "n_test_good": 20,
+    "n_test_defect": 63,
+    "image_auroc": 1.0,
+    "accuracy_at_threshold": 1.0,
+    "good_pass_rate": 1.0,
+    "defect_catch_rate": 1.0,
+    "pixel_auroc": 0.9845,
+    "per_type_flagged_rate": {
+      "broken_large": {
+        "n": 20,
+        "flagged_rate": 1.0
+      },
+      "broken_small": {
+        "n": 22,
+        "flagged_rate": 1.0
+      },
+      "contamination": {
+        "n": 21,
+        "flagged_rate": 1.0
+      },
+      "good": {
+        "n": 20,
+        "flagged_rate": 0.0
+      }
+    }
+  },
+  "trained_at": "2026-10-04 09:23:37",
+  "train_seconds": 57.4,
+  "threshold_trained": 1.795182466506958
+}

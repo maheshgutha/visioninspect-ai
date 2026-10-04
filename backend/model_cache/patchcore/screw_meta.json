@@ -1,0 +1,54 @@
+{
+  "category": "screw",
+  "threshold": 1.618,
+  "val_good_scores": {
+    "min": 1.281746745109558,
+    "max": 1.7509400844573975,
+    "mean": 1.4364628624171019
+  },
+  "bank_size": 49152,
+  "feature_dim": 384,
+  "coreset_ratio": 0.03,
+  "rotations": 4,
+  "threshold_rule": "manual",
+  "input_size": 320,
+  "n_fit_images": 256,
+  "metrics": {
+    "n_test_good": 41,
+    "n_test_defect": 119,
+    "image_auroc": 0.9871,
+    "accuracy_at_threshold": 0.7562,
+    "good_pass_rate": 1.0,
+    "defect_catch_rate": 0.6723,
+    "pixel_auroc": 0.9953,
+    "per_type_flagged_rate": {
+      "good": {
+        "n": 41,
+        "flagged_rate": 0.0
+      },
+      "manipulated_front": {
+        "n": 24,
+        "flagged_rate": 0.542
+      },
+      "scratch_head": {
+        "n": 24,
+        "flagged_rate": 0.708
+      },
+      "scratch_neck": {
+        "n": 25,
+        "flagged_rate": 0.96
+      },
+      "thread_side": {
+        "n": 23,
+        "flagged_rate": 0.304
+      },
+      "thread_top": {
+        "n": 23,
+        "flagged_rate": 0.826
+      }
+    }
+  },
+  "trained_at": "2026-10-04 09:57:44",
+  "train_seconds": 1341.0,
+  "threshold_trained": 1.7509400844573975
+}

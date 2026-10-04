@@ -112,12 +112,16 @@ class TestImageProcessingPipeline(unittest.TestCase):
         self.assertTrue(report["sharpness_score"] > 0)
         self.assertIn("quality_score", report)
 
-    def test_predict_defect_fallback(self):
-        prediction = predict_defect(self.img_path, "Test Product")
-        self.assertIn(prediction["status"], ["pass", "fail"])
-        self.assertIn("confidence_score", prediction)
-        self.assertIn("severity_score", prediction)
-        self.assertIn("severity_level", prediction)
+    def test_predict_defect_no_model_raises(self):
+        # Use an empty model folder: no trained model -> clear RuntimeError, not a guess.
+        from app.config import settings
+        old_dir, settings.PATCHCORE_DIR = settings.PATCHCORE_DIR, tempfile.mkdtemp()
+        try:
+            with self.assertRaises(RuntimeError) as ctx:
+                predict_defect(self.img_path, "Test Product")
+            self.assertIn("Unsupported product", str(ctx.exception))
+        finally:
+            settings.PATCHCORE_DIR = old_dir
 
 
 if __name__ == "__main__":

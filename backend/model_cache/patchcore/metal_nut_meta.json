@@ -1,0 +1,50 @@
+{
+  "category": "metal_nut",
+  "threshold": 1.99,
+  "val_good_scores": {
+    "min": 1.6218233108520508,
+    "max": 2.0770225524902344,
+    "mean": 1.7802162739363583
+  },
+  "bank_size": 33792,
+  "feature_dim": 384,
+  "coreset_ratio": 0.03,
+  "rotations": 4,
+  "threshold_rule": "manual",
+  "input_size": 320,
+  "n_fit_images": 176,
+  "metrics": {
+    "n_test_good": 22,
+    "n_test_defect": 93,
+    "image_auroc": 0.9971,
+    "accuracy_at_threshold": 0.9652,
+    "good_pass_rate": 0.9545,
+    "defect_catch_rate": 0.9677,
+    "pixel_auroc": 0.9815,
+    "per_type_flagged_rate": {
+      "bent": {
+        "n": 25,
+        "flagged_rate": 1.0
+      },
+      "color": {
+        "n": 22,
+        "flagged_rate": 0.955
+      },
+      "flip": {
+        "n": 23,
+        "flagged_rate": 1.0
+      },
+      "good": {
+        "n": 22,
+        "flagged_rate": 0.045
+      },
+      "scratch": {
+        "n": 23,
+        "flagged_rate": 0.913
+      }
+    }
+  },
+  "trained_at": "2026-10-04 09:35:24",
+  "train_seconds": 525.1,
+  "threshold_trained": 2.094237510924472
+}
