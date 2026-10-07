@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     # PatchCore "defect" covers more than this share of the picture) are treated
     # as "not in the trained setup" and returned as unsupported.
     PATCHCORE_MAX_ANOMALY_AREA: float = 0.5
-    IDENTIFIER_CUTOFF_OVERRIDE: float | None = None   # None = use the calibrated value
+    IDENTIFIER_CUTOFF_OVERRIDE: float | None = 0.80   # Tolerant cutoff to recognize unseen real-world product photos
 
     CORS_ORIGINS: str = "http://localhost:5173"
 

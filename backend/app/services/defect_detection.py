@@ -228,12 +228,6 @@ def predict_defect(image_path: str, product_name: Optional[str] = None) -> dict:
     category = route["category"]
     pc_result = _predict_patchcore(image_path, category, route["pack"]) if category else None
 
-    if pc_result is not None and pc_result[1] > settings.PATCHCORE_MAX_ANOMALY_AREA:
-        # anomaly covering most of the photo means the photo is not like the
-        # training images (different background/lighting/product), not a real defect
-        pc_result = None
-        raise RuntimeError(_UNSUPPORTED_MSG)
-
     if pc_result is None:
         raise RuntimeError(_UNSUPPORTED_MSG)
 

@@ -46,13 +46,9 @@ def main():
     if result is None:
         sys.exit(f"No usable PatchCore model for {label}")
     mask, ratio, conf, model_used, amap, threshold, score = result
-    limit = settings.PATCHCORE_MAX_ANOMALY_AREA
     print(f"PatchCore score         : {score:.3f}   (threshold {threshold:.3f})")
-    print(f"Image area flagged      : {ratio:.1%}   (limit {limit:.0%})")
-    if ratio > limit:
-        print("DECISION: flagged area too large -> treated as 'not the trained setup' -> unsupported (stored as PENDING)")
-    else:
-        print(f"DECISION: inspected by {model_used} -> {'FAIL (defect)' if score > threshold else 'PASS'}")
+    print(f"Image area flagged      : {ratio:.1%}")
+    print(f"DECISION: inspected by {model_used} -> {'FAIL (defect)' if score > threshold else 'PASS'}")
 
 
 if __name__ == "__main__":

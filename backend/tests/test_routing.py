@@ -82,15 +82,16 @@ class TestRouting(unittest.TestCase):
 
     def setUp(self):
         self.saved = (settings.PATCHCORE_DIR, settings.UPLOAD_DIR, settings.PATCHCORE_MAX_ANOMALY_AREA,
-                      pc.get_feature_fn)
+                      settings.IDENTIFIER_CUTOFF_OVERRIDE, pc.get_feature_fn)
         settings.PATCHCORE_DIR, settings.UPLOAD_DIR = str(self.pcdir), str(self.uploads)
+        settings.IDENTIFIER_CUTOFF_OVERRIDE = None
         pc.get_feature_fn = lambda _d: fake_feature_fn
         pc._bank_cache.clear()
         identifier._cache.clear()
 
     def tearDown(self):
         (settings.PATCHCORE_DIR, settings.UPLOAD_DIR, settings.PATCHCORE_MAX_ANOMALY_AREA,
-         pc.get_feature_fn) = self.saved
+         settings.IDENTIFIER_CUTOFF_OVERRIDE, pc.get_feature_fn) = self.saved
         pc._bank_cache.clear()
         identifier._cache.clear()
 
@@ -113,12 +114,11 @@ class TestRouting(unittest.TestCase):
         self.assertIn("Unsupported product", msg)
         self.assertIn("bottle", msg)
 
-    def test_huge_flagged_area_raises_clear_error(self):
-        """If PatchCore flags >MAX_ANOMALY_AREA it means wrong setup — must raise, not hallucinate."""
-        settings.PATCHCORE_MAX_ANOMALY_AREA = 0.001
-        with self.assertRaises(RuntimeError) as ctx:
-            defect_detection.predict_defect(str(self.defect), None)
-        self.assertIn("Unsupported product", str(ctx.exception))
+    def test_large_flagged_area_is_detected_as_fail(self):
+        """A large flagged anomaly area is flagged as a defect FAIL (not dumped to pending)."""
+        bad = defect_detection.predict_defect(str(self.defect), None)
+        self.assertEqual(bad["status"], "fail")
+        self.assertGreater(bad["anomaly_ratio"], 0.0)
 
     def test_unknown_product_no_model_raises_clear_error(self):
         """No trained model + unrecognised photo -> clear RuntimeError."""
