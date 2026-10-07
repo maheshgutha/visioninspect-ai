@@ -39,7 +39,7 @@ def main():
     print(f"Closest trained product : {label}")
     print(f"Similarity              : {sim:.4f}   (cutoff {cutoff:.4f}; gap {sim - cutoff:+.4f})")
     if sim < cutoff:
-        print("DECISION: unknown product / different setup -> AI vision would inspect it")
+        print("DECISION: unknown product / different setup -> unsupported (raises error, stored as PENDING)")
         return
 
     result = dd._predict_patchcore(path, label, (rgb, feats[0], size))
@@ -50,7 +50,7 @@ def main():
     print(f"PatchCore score         : {score:.3f}   (threshold {threshold:.3f})")
     print(f"Image area flagged      : {ratio:.1%}   (limit {limit:.0%})")
     if ratio > limit:
-        print("DECISION: flagged area too large -> treated as 'not the trained setup' -> AI vision would inspect it")
+        print("DECISION: flagged area too large -> treated as 'not the trained setup' -> unsupported (stored as PENDING)")
     else:
         print(f"DECISION: inspected by {model_used} -> {'FAIL (defect)' if score > threshold else 'PASS'}")
 

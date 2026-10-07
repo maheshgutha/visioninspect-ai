@@ -7,13 +7,11 @@ resulting memory bank + threshold are loaded here for inference.
 
     predict_defect(path, name)  -> runs inference for the product's category
 
-For images that don't match any trained product (or whose anomaly map
-covers more than PATCHCORE_MAX_ANOMALY_AREA of the image, indicating a
-different photo setup), predict_defect raises a RuntimeError with a clear
-human-readable message. The upload router catches that and stores the
-inspection as PENDING with the message as the note.
+For images that don't match any trained product and cannot be identified,
+predict_defect raises a RuntimeError with a clear message listing supported
+products (the upload router records this as PENDING).
 
-Supported products: bottle, cable, metal_nut, screw, toothbrush.
+Supported products: bottle, cable, metal nut, screw, toothbrush.
 """
 import logging
 import os
@@ -65,10 +63,7 @@ def _extract_regions(mask: np.ndarray, max_boxes: int = 5):
     """
     Find connected anomaly regions in the mask. Returns unscaled region
     dicts (still in analysis-resolution pixel space) that carry both the
-    axis-aligned bounding box AND the true contour area, since a diagonal
-    scratch has a bounding box far bigger than its actual pixel area while
-    a round blob's bbox is almost entirely filled - that ratio ("extent")
-    is what lets classification work regardless of defect orientation.
+    axis-aligned bounding box AND the true contour area.
     """
     mask_u8 = (mask.astype(np.uint8)) * 255
     mask_u8 = cv2.morphologyEx(mask_u8, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
@@ -98,20 +93,7 @@ def _scale_regions(regions: list, scale_x: float, scale_y: float):
 def _classify_defect_type(mask_area: int, regions: list) -> Optional[str]:
     """
     Rule-based defect typing from the anomaly regions found in the mask.
-
-    This is intentionally NOT a learned classifier - it's a transparent,
-    explainable heuristic, consistent with the statistical (non-deep-
-    learning) approach used for detection itself. Only called when
-    status == "fail" (i.e. regions is non-empty).
-
-        many small scattered regions        -> "pitting"
-        thin region (low bbox fill)         -> "scratch"  (works for
-                                                diagonal lines too, since
-                                                extent - not aspect ratio -
-                                                drives this)
-        large, mostly-filled region         -> "contamination"
-        elongated and reasonably filled     -> "crack"
-        anything else                       -> "deformation"
+    Only called when status == "fail" (i.e. regions is non-empty).
     """
     if not regions:
         return None
@@ -124,15 +106,7 @@ def _classify_defect_type(mask_area: int, regions: list) -> Optional[str]:
     bbox_area = max(1, w * h)
     long_side, short_side = max(w, h), max(1, min(w, h))
     aspect_ratio = long_side / short_side
-    # extent: how much of its OWN bounding box the region actually fills.
-    # A thin line - however long, however it's oriented - fills very
-    # little of its bbox (a diagonal scratch's bbox is nearly the whole
-    # image, but the line itself is a tiny fraction of that box), so this
-    # is a much more reliable "thinness" signal than aspect ratio alone.
     extent = largest["contour_area"] / bbox_area
-    # coverage: how much of the WHOLE image the actual defect pixels take
-    # up - used to size "contamination" rather than bbox size, since bbox
-    # size is misleading for diagonal/elongated shapes.
     coverage_ratio = largest["contour_area"] / mask_area
 
     if extent <= 0.35:
@@ -151,7 +125,6 @@ def _save_heatmap(original_path: str, mask: np.ndarray, amap: Optional[np.ndarra
     h, w = original.shape[:2]
     mask_resized = cv2.resize((mask.astype(np.uint8) * 255), (w, h), interpolation=cv2.INTER_NEAREST)
     if amap is not None and threshold:
-        # graded colours: just over threshold = blue/green, strongest = red
         norm = np.clip((amap - threshold) / max(threshold, 1e-6), 0, 1)
         intensity = cv2.resize((norm * 255).astype(np.uint8), (w, h), interpolation=cv2.INTER_LINEAR)
         heat = cv2.applyColorMap(intensity, cv2.COLORMAP_JET)
@@ -247,6 +220,8 @@ def predict_defect(image_path: str, product_name: Optional[str] = None) -> dict:
     hint = get_category_key(product_name) if product_name else "generic"
 
     original = cv2.imread(image_path, cv2.IMREAD_COLOR)
+    if original is None:
+        raise ValueError(f"Could not read image file at {image_path}")
     orig_h, orig_w = original.shape[:2]
 
     route = _route_image(image_path, hint)
